@@ -3,6 +3,7 @@ class Node:
 
   def __init__(self):
     self.childs = []
+    self.parents = []
     self.number = Node.total
     Node.total = Node.total+1
 
@@ -16,9 +17,12 @@ class Graph:
     self.end = Node()
     
     self.start.childs.append([regex, self.end])
-    self.nodes = [self.start, self.end]
+    self.nodes = [self.start, self.end]   
+    self.e_closures = [[self.start], [self.end]]
 
-  def generate_eafn(self):
+    self.end = [self.end]
+	
+  def generate_enfa(self):
     operations = ['+','*']
 
     for node in self.nodes:
@@ -65,6 +69,7 @@ class Graph:
           
             aux_node = Node()
             self.nodes.append(aux_node)
+            self.e_closures.append([aux_node])
             
             node.childs.pop(idx)
             node.childs.append([r1, aux_node])
@@ -76,6 +81,7 @@ class Graph:
           if len(processed_regex) == 2:
             aux_node = Node()
             self.nodes.append(aux_node)
+            self.e_closures.append([aux_node])           
             
             node.childs.pop(idx)
             node.childs.append(['&', aux_node])
@@ -85,12 +91,61 @@ class Graph:
 
         idx += 1
 
+  def calculate_e_closure(self, node):
+    idx = 0
+
+    while idx < len(node.childs):
+      [symbol, child] = node.childs[idx]
+      if symbol == '&':
+        node.childs.pop(idx)
+        self.e_closures[node.number].extend(self.calculate_e_closure(child))
+        if child in self.end:
+          self.end.append(node)
+      
+      else:
+        idx += 1
+   
+    return self.e_closures[node.number]
+ 
+  def generate_nfa(self):    
+    for node in self.nodes: 
+      self.calculate_e_closure(node)
+
+    for node in self.nodes:
+      for symbol, child in node.childs:
+        child.parents.append([symbol, node])    
+    
+    new_childs = []
+    for node in self.nodes:
+      sub_new_childs = []
+      for symbol, child in node.childs:
+        for grand_child in self.e_closures[child.number][1:]:       
+          sub_new_childs.append([symbol, grand_child])           
+          grand_child.parents.append([symbol, node]) 
+
+      for child in self.e_closures[node.number][1:]:
+        for symbol, grand_child in child.childs:  
+          sub_new_childs.append([symbol, grand_child])
+          grand_child.parents.append([symbol, node]) 
+      
+      new_childs.append(sub_new_childs)
+
+    for idx, l in enumerate(new_childs):
+      self.nodes[idx].childs.extend(l)      
+
+    idx = 1 
+    while idx < len(self.nodes):
+      if not self.nodes[idx].parents:
+        self.nodes.pop(idx)
+      else:
+        idx += 1
+         
   def __str__(self):
     s = ''
     for node in self.nodes:
       s += str(node)
       
-      if node == self.end:
+      if not node.childs:
         s += ':\n'
         continue
 
@@ -104,6 +159,16 @@ class Graph:
       s[-1] = ']\n'
       s = ''.join(s)
     
+    s += '\nEnd: ['
+
+    for node in self.end:
+      s += str(node) + ', '
+ 
+    s = list(s)
+    s = s[0:-1]
+    s[-1] = ']\n'
+    s = ''.join(s)
+ 
     return s
 
 
@@ -158,5 +223,10 @@ def eliminate_start_end_parenthesis(block):
 
 regex = input()
 g = Graph(regex)
-g.generate_eafn()
+g.generate_enfa()
+print(g)
+
+print('\n \n')
+
+g.generate_nfa()
 print(g)
