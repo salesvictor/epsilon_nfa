@@ -1,0 +1,85 @@
+digraph regex1 {
+	rankdir = "LR";
+
+	0 -> 3 [label="a, b"];
+	0 -> 4 [label="b"];
+	2 -> 4 [label="b"];
+	3 -> 2 [label="a, b"];
+	3 -> 3 [label="a, b"];
+	3 -> 4 [label="b"];
+	4 -> 1 [label="b"];
+	4 -> 5 [label="b"];
+	4 -> 6 [label="b"];
+	5 -> 6 [label="a, b"];
+	6 -> 6 [label="a, b"];
+	6 -> 1 [label="a, b"];
+
+	1 [shape = doublecircle];
+	5 [shape = doublecircle];
+	6 [shape = doublecircle];
+}
+
+
+digraph regex2 {
+	rankdir = "LR";
+
+	0 -> 3 [label="a"];
+	2 -> 3 [label="a"];
+	3 -> 1 [label="b, c"];
+	3 -> 2 [label="b, c"];
+
+	0 [shape=doublecircle];
+	1 [shape=doublecircle];
+	2 [shape=doublecircle];
+}
+
+
+digraph regex3 {
+	rankdir = "LR";
+
+	0 -> 1 [label="a, b"];
+	0 -> 4 [label="a"];
+	0 -> 5 [label="b"];
+	2 -> 1 [label="b"];
+	3 -> 1 [label="a"];
+	4 -> 1 [label="b"];
+	4 -> 2 [label="a"];
+	4 -> 4 [label="a"];
+	5 -> 1 [label="a"];
+	5 -> 3 [label="b"];
+	5 -> 5 [label="b"];
+
+	1 [shape=doublecircle];
+}
+
+
+digraph regex4 {
+	rankdir = "LR";
+
+	0 -> 3 [label="a"];
+	0 -> 5 [label="b"];
+	0 -> 6 [label="c"];
+	2 -> 5 [label="b"];
+	2 -> 6 [label="c"];
+	3 -> 1 [label="a"];
+	3 -> 2 [label="a"];
+	3 -> 3 [label="a"];
+	3 -> 4 [label="a"];
+	3 -> 5 [label="a, b"];
+	3 -> 6 [label="a, c"];
+	4 -> 6 [label="c"];
+	5 -> 1 [label="b"];
+	5 -> 4 [label="b"];
+	5 -> 5 [label="b"];
+	5 -> 6 [label="b, c"];
+	6 -> 1 [label="c"];
+	6 -> 6 [label="c"];
+
+	0 [shape=doublecircle];
+	1 [shape=doublecircle];
+	2 [shape=doublecircle];
+	3 [shape=doublecircle];
+	4 [shape=doublecircle];
+	5 [shape=doublecircle];
+	6 [shape=doublecircle];
+}
