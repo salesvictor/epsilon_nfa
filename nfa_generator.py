@@ -14,9 +14,10 @@ class Node:
     self.parents = []  # List of archs [symbol, node] to this state 
     self.number = Node.total   # Number that identifies the node
     Node.total = Node.total+1  # Total of nodes is updated
-
+  
   def __str__(self):
     return str(self.number)
+
 
 class Graph:
   """
@@ -224,62 +225,53 @@ class Graph:
  
     return s
 
-
+    
 def process_regex(regex):
-  while regex != eliminate_start_end_parenthesis(regex):
-    regex = eliminate_start_end_parenthesis(regex)
+    while regex != eliminate_start_end_parenthesis(regex):
+        regex = eliminate_start_end_parenthesis(regex)
 
-  processed = []
+    processed = []
 
-  parenthesis = 0
-  start = 0
-  end = 0
+    parenthesis = 0
+    start = 0
+    end = 0
 
-  for idx, c in enumerate(regex):
-    if c == '(':
-      if not parenthesis:
-        start = idx
-      parenthesis += 1
-    elif c == ')':
-      parenthesis -= 1
-    if not parenthesis:
-      end = idx
-      block = regex[start:(end+1)]
-      processed.append(''.join(block))
-      start = idx+1
-      end = idx+1
+    for idx, c in enumerate(regex):
+        if c == '(':
+            if not parenthesis:
+                start = idx
+            parenthesis += 1
+        elif c == ')':
+            parenthesis -= 1
+        if not parenthesis:
+            end = idx
+            block = regex[start:(end + 1)]
+            processed.append(''.join(block))
+            start = idx + 1
+            end = idx + 1
 
-  for idx in range(len(processed)):
-    while eliminate_start_end_parenthesis(processed[idx]) != processed[idx]:
-      processed[idx] = eliminate_start_end_parenthesis(processed[idx])
+    for idx in range(len(processed)):
+        while eliminate_start_end_parenthesis(processed[idx]) != processed[idx]:
+            processed[idx] = eliminate_start_end_parenthesis(processed[idx])
 
-  return processed
+    return processed
+
 
 def eliminate_start_end_parenthesis(block):
-  parenthesis = 0
-  alter = True
+    parenthesis = 0
+    alter = True
 
-  if block[0] == '(':
-    for idx, c in enumerate(block):
-      if c == '(':
-        parenthesis += 1
-      elif c == ')':
-        parenthesis -= 1
-      if not parenthesis and idx != (len(block)-1):
-        alter = False
-      if not parenthesis and idx == (len(block)-1) and alter:
-        block = list(block)
-        block = block[1:-1]
-        block = ''.join(block)
-       
-  return block
+    if block[0] == '(':
+        for idx, c in enumerate(block):
+            if c == '(':
+                parenthesis += 1
+            elif c == ')':
+                parenthesis -= 1
+            if not parenthesis and idx != (len(block) - 1):
+                alter = False
+            if not parenthesis and idx == (len(block) - 1) and alter:
+                block = list(block)
+                block = block[1:-1]
+                block = ''.join(block)
 
-regex = input()
-g = Graph(regex)
-g.generate_enfa()
-print(g)
-
-print('\n \n')
-
-g.generate_nfa()
-print(g)
+    return block
