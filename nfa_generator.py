@@ -131,6 +131,8 @@ class Graph:
     Recursive function for calculating the epsilon_closure of a node, 
     stored at the e_closures attribute from the graph. If a final
     node is in the e_closure, this node must also be a final node. 
+    :param node: node whose e_closure must be calculated
+    :return: returns the list of nodes in the e_closure
     """
     idx = 0
 
@@ -227,6 +229,11 @@ class Graph:
 
     
 def process_regex(regex):
+    """
+    Parses a regex into a list of symbols, operations and subexpressions
+    :param regex: regular expression to be parsed
+    :return: returns the parsed list
+    """
     while regex != eliminate_start_end_parenthesis(regex):
         regex = eliminate_start_end_parenthesis(regex)
 
@@ -258,6 +265,11 @@ def process_regex(regex):
 
 
 def eliminate_start_end_parenthesis(block):
+    """
+    Removes the parenthesis separating a subexpression from the regex
+    :param block: subexpression to be corrected
+    :return: returns the block without parenthesis 
+    """    
     parenthesis = 0
     alter = True
 

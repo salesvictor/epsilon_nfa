@@ -70,7 +70,7 @@ def convert_graph_to_list(graph_format_automaton):
 
     for node in graph_format_automaton.nodes:
         t = [node.number]
-        for child in node.childs:
+        for child in node.children:
             t.append([child[0][0], child[1].number])
         t = tuple(t)
         aux.append(t)
